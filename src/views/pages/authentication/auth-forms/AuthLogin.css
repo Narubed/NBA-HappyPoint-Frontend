@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Mr+Dafoe&display=swap');
+
+
+.wellcome-text {
+    font-family: 'Mr Dafoe';
+    margin: 0;
+    font-size: 1.5em;
+    margin-top: -1.5em;
+    color: black;
+    text-shadow: 0 0 0.05em #fff, 0 0 0.2em #fe05e1, 0 0 0.3em #fe05e1;
+    transform: rotate(-7deg);
+}

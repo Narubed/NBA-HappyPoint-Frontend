@@ -1,0 +1,68 @@
+import { lazy } from 'react';
+
+// project imports
+import MainLayout from '../layout/MainLayout';
+import Loadable from '../ui-component/Loadable';
+
+// dashboard routing
+const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default')));
+const Dashboard = Loadable(lazy(() => import('../views/admins/dashboard')));
+const Contacts = Loadable(lazy(() => import('../views/admins/contacts')));
+const ChangeLevelMember = Loadable(lazy(() => import('../views/admins/ChangeLevelMember')));
+const Privilege = Loadable(lazy(() => import('../views/admins/privilege')));
+const CreatePrivilege = Loadable(
+  lazy(() => import('../views/admins/privilege/component/CreatePrivilege'))
+);
+const EditPrivilege = Loadable(
+  lazy(() => import('../views/admins/privilege/component/EditPrivilege'))
+);
+
+// utilities routing
+const UtilsTypography = Loadable(lazy(() => import('../views/utilities/Typography')));
+const UtilsColor = Loadable(lazy(() => import('../views/utilities/Color')));
+const UtilsShadow = Loadable(lazy(() => import('../views/utilities/Shadow')));
+const UtilsMaterialIcons = Loadable(lazy(() => import('../views/utilities/MaterialIcons')));
+const UtilsTablerIcons = Loadable(lazy(() => import('../views/utilities/TablerIcons')));
+
+// sample page routing
+const SamplePage = Loadable(lazy(() => import('../views/sample-page')));
+
+// ==============================|| MAIN ROUTING ||============================== //
+
+const MainRoutes = {
+  path: '/',
+  element: <MainLayout />,
+  children: [
+    {
+      path: '/',
+      element: <Dashboard />
+    },
+    {
+      path: '/contacts',
+      element: <Contacts />
+    },
+    {
+      path: '/change-level-member',
+      element: <ChangeLevelMember />
+    },
+    {
+      path: '/privilege',
+      element: <Privilege />
+    },
+    {
+      path: '/privilege/create',
+      element: <CreatePrivilege />
+    },
+    {
+      path: '/privilege/edit',
+      element: <EditPrivilege />
+    },
+
+    {
+      path: '*',
+      element: <Dashboard /> // กลับมาตั้งไฟล์ 404 ด้วย
+    }
+  ]
+};
+
+export default MainRoutes;
