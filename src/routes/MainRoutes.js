@@ -9,6 +9,7 @@ const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default'
 const Main = Loadable(lazy(() => import('../views/main')));
 const PopularCard = Loadable(lazy(() => import('../views/statistics/PopularCard')));
 const TotalGrowthBarChart = Loadable(lazy(() => import('../views/statistics/TotalGrowthBarChart')));
+const PrivilegeDetail = Loadable(lazy(() => import('../views/main/usePrivilege/privilegeDetail')));
 
 // utilities routing
 const UtilsTypography = Loadable(lazy(() => import('../views/utilities/Typography')));
@@ -29,6 +30,10 @@ const MainRoutes = {
     {
       path: '/',
       element: <Main />
+    },
+    {
+      path: '/PrivilegeDetail',
+      element: <PrivilegeDetail />
     },
     {
       path: '/PopularCard',

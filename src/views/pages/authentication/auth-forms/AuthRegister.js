@@ -28,6 +28,7 @@ import {
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import AnimateButton from '../../../../ui-component/extended/AnimateButton';
+import Conditions from './Conditions';
 // component
 
 // ----------------------------------------------------------------------
@@ -55,7 +56,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function RegisterForm() {
-  const classes = useStyles();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [open, setOpen] = React.useState(false);
@@ -70,19 +70,20 @@ export default function RegisterForm() {
   });
   const [mathRandom, setMathRandom] = useState();
   const [errorOTP, setERROROTP] = React.useState(false);
+  const [disabledButton, setDisabledButton] = React.useState(true);
 
   const RegisterSchema = Yup.object().shape({
     phone: Yup.string()
       .min(2, 'Too Short!')
       .max(50, 'Too Long!')
       .required('ไม่ต้องใส่ - หรือเว้นวรรค'),
-    firstName: Yup.string()
-      .min(2, 'Too Short!')
+    firstName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('กรุณากรอกชื่อ'),
+    lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('กรุณากรอกนามสกุล'),
+    address: Yup.string()
+      .min(6, 'Too Short!')
       .max(50, 'Too Long!')
-      .required('First name required'),
-    lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Last name required'),
-    address: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Last name required'),
-    password: Yup.string().required('Password is required')
+      .required('กรุณากรอกที่อยู่สำหรับจัดส่งของด้วย'),
+    password: Yup.string().required('กรุณาใส่รหัสผ่าน 6 ตัวขึ้นไป')
   });
   const handleSubmits = async (e) => {
     console.log(e);
@@ -125,29 +126,29 @@ export default function RegisterForm() {
         phone: result
       });
       setMathRandom(randomMath);
-      // const config = {
-      //   method: 'post',
-      //   url: 'https://portal-otp.smsmkt.com/api/send-message',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     api_key: `${process.env.REACT_APP_OTP_API_KEY}`,
-      //     secret_key: `${process.env.REACT_APP_OTP_SECRET_KEY}`
-      //   },
-      //   data: JSON.stringify({
-      //     message: `รหัส OTP คือ ${randomMath} ใช้เพื่อลงทะเบียนยืนยันตัวตน`,
-      //     phone: result,
-      //     sender: `${process.env.REACT_APP_OTP_SENDER}`,
-      //     expire: '10:00'
-      //   })
-      // };
+      const config = {
+        method: 'post',
+        url: 'https://portal-otp.smsmkt.com/api/send-message',
+        headers: {
+          'Content-Type': 'application/json',
+          api_key: `${process.env.REACT_APP_OTP_API_KEY}`,
+          secret_key: `${process.env.REACT_APP_OTP_SECRET_KEY}`
+        },
+        data: JSON.stringify({
+          message: `รหัส OTP คือ ${randomMath} ใช้เพื่อลงทะเบียนยืนยันตัวตน`,
+          phone: result,
+          sender: `${process.env.REACT_APP_OTP_SENDER}`,
+          expire: '10:00'
+        })
+      };
 
-      // axios(config)
-      //   .then((response) => {
-      //     console.log(JSON.stringify(response.data));
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //   });
+      axios(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
 
@@ -157,29 +158,29 @@ export default function RegisterForm() {
     const randomMath = Math.floor(Math.random() * (999999 - 100000) + 100000);
     setMathRandom(randomMath);
     console.log(randomMath);
-    // const config = {
-    //   method: 'post',
-    //   url: 'https://portal-otp.smsmkt.com/api/send-message',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     api_key: `${process.env.REACT_APP_OTP_API_KEY}`,
-    //     secret_key: `${process.env.REACT_APP_OTP_SECRET_KEY}`
-    //   },
-    //   data: JSON.stringify({
-    //     message: `รหัส OTP คือ ${randomMath} ใช้เพื่อลงทะเบียนยืนยันตัวตน`,
-    //     phone: value.phone,
-    //     sender: `${process.env.REACT_APP_OTP_SENDER}`,
-    //     expire: '10:00'
-    //   })
-    // };
+    const config = {
+      method: 'post',
+      url: 'https://portal-otp.smsmkt.com/api/send-message',
+      headers: {
+        'Content-Type': 'application/json',
+        api_key: `${process.env.REACT_APP_OTP_API_KEY}`,
+        secret_key: `${process.env.REACT_APP_OTP_SECRET_KEY}`
+      },
+      data: JSON.stringify({
+        message: `รหัส OTP คือ ${randomMath} ใช้เพื่อลงทะเบียนยืนยันตัวตน`,
+        phone: value.phone,
+        sender: `${process.env.REACT_APP_OTP_SENDER}`,
+        expire: '10:00'
+      })
+    };
 
-    // axios(config)
-    //   .then((response) => {
-    //     console.log(JSON.stringify(response.data));
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    axios(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const confirmOTP = async () => {
@@ -229,6 +230,7 @@ export default function RegisterForm() {
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
   return (
     <>
+      <Conditions disabledButton={disabledButton} setDisabledButton={setDisabledButton} />
       <FormikProvider value={formik}>
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
           <Stack spacing={3}>
@@ -313,7 +315,14 @@ export default function RegisterForm() {
               helperText={touched.password && errors.password}
             />
             <AnimateButton>
-              <Button fullWidth size="large" type="submit" variant="contained" color="secondary">
+              <Button
+                fullWidth
+                size="large"
+                type="submit"
+                variant="contained"
+                color="secondary"
+                disabled={disabledButton}
+              >
                 ยืนยันการสมัคร
               </Button>
             </AnimateButton>

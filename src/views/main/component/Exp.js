@@ -1,4 +1,7 @@
+/* eslint-disable react/prop-types */
+import React from 'react';
 import PropTypes from 'prop-types';
+import numeral from 'numeral';
 
 // material-ui
 import { styled, useTheme } from '@mui/material/styles';
@@ -16,9 +19,8 @@ import {
   linearProgressClasses
 } from '@mui/material';
 
-// assets
-import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
 import EdgesensorHighIcon from '@mui/icons-material/EdgesensorHigh';
+import SkeletonEarningCard from '../../../ui-component/cards/Skeleton/EarningCard';
 // styles
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -51,7 +53,7 @@ const CardStyle = styled(Card)(({ theme }) => ({
 
 // ==============================|| PROGRESS BAR WITH LABEL ||============================== //
 
-function LinearProgressWithLabel({ value, ...others }) {
+function LinearProgressWithLabel({ value, nextLevel, valueRemaining, ...others }) {
   const theme = useTheme();
 
   return (
@@ -73,7 +75,8 @@ function LinearProgressWithLabel({ value, ...others }) {
       </Grid>
       <Grid item>
         <Typography variant="h6" sx={{ color: theme.palette.secondary[800] }}>
-          ต้องการอีก xxxxx เพื่อเลื่อนเป็น xxxxx
+          ต้องการอีก {numeral(valueRemaining).format('0,0')} exp. เพื่อเลื่อนเป็นระดับ{' '}
+          {nextLevel.lmb_name}
         </Typography>
       </Grid>
     </Grid>
@@ -81,50 +84,86 @@ function LinearProgressWithLabel({ value, ...others }) {
 }
 
 LinearProgressWithLabel.propTypes = {
-  value: PropTypes.number
+  value: PropTypes.number,
+  nextLevel: PropTypes.object,
+  valueRemaining: PropTypes.number
 };
 
 // ==============================|| SIDEBAR MENU Card ||============================== //
 
-function MenuCard() {
+function MenuCard({ owner, levels, isLoading }) {
   const theme = useTheme();
 
+  let nextLevel = '';
+  let valueLevels = 0;
+  let valueRemaining = 0;
+  let findIndexLevel = [];
+  if (levels.length !== 0) {
+    findIndexLevel = levels.findIndex((item) => item._id === owner.member_level);
+    if (findIndexLevel >= levels.length - 1) {
+      nextLevel = 'เลเวลสูงสุดแล้ว';
+    } else {
+      nextLevel = levels[findIndexLevel + 1];
+      valueRemaining = levels[findIndexLevel + 1].lmb_point - owner.member_total_point;
+      valueLevels = (owner.member_total_point / levels[findIndexLevel + 1].lmb_point) * 100;
+    }
+  }
   return (
-    <CardStyle>
-      <CardContent sx={{ p: 2 }}>
-        <List sx={{ p: 0, m: 0 }}>
-          <ListItem alignItems="flex-start" disableGutters sx={{ p: 0 }}>
-            <ListItemAvatar sx={{ mt: 0 }}>
-              <Avatar
-                variant="rounded"
-                sx={{
-                  ...theme.typography.commonAvatar,
-                  ...theme.typography.largeAvatar,
-                  color: theme.palette.error.main,
-                  border: 'none',
-                  borderColor: theme.palette.error.main,
-                  background: '#fff',
-                  marginRight: '12px'
-                }}
-              >
-                <EdgesensorHighIcon fontSize="inherit" />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              sx={{ mt: 0 }}
-              primary={
-                <Typography variant="subtitle1" sx={{ color: theme.palette.primary[800] }}>
-                  ค่าประสบการณ์ทั้งหมด
-                </Typography>
-              }
-              secondary={<Typography variant="caption"> 20,000,000</Typography>}
+    <>
+      {isLoading ? (
+        <SkeletonEarningCard />
+      ) : (
+        <CardStyle>
+          <CardContent sx={{ p: 2 }}>
+            <List sx={{ p: 0, m: 0 }}>
+              <ListItem alignItems="flex-start" disableGutters sx={{ p: 0 }}>
+                <ListItemAvatar sx={{ mt: 0 }}>
+                  <Avatar
+                    variant="rounded"
+                    sx={{
+                      ...theme.typography.commonAvatar,
+                      ...theme.typography.largeAvatar,
+                      color: theme.palette.error.main,
+                      border: 'none',
+                      borderColor: theme.palette.error.main,
+                      background: '#fff',
+                      marginRight: '12px'
+                    }}
+                  >
+                    <EdgesensorHighIcon fontSize="inherit" />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  sx={{ mt: 0 }}
+                  primary={
+                    <Typography variant="subtitle1" sx={{ color: theme.palette.primary[800] }}>
+                      ค่าประสบการณ์ทั้งหมด
+                    </Typography>
+                  }
+                  secondary={
+                    <Typography variant="caption">
+                      {' '}
+                      {numeral(owner.member_total_point).format('0,0')} exp.
+                    </Typography>
+                  }
+                />
+              </ListItem>
+            </List>
+            <LinearProgressWithLabel
+              value={valueLevels}
+              nextLevel={nextLevel}
+              valueRemaining={valueRemaining}
             />
-          </ListItem>
-        </List>
-        <LinearProgressWithLabel value={89} />
-      </CardContent>
-    </CardStyle>
+          </CardContent>
+        </CardStyle>
+      )}
+    </>
   );
 }
 
 export default MenuCard;
+
+MenuCard.propTypes = {
+  isLoading: PropTypes.bool,
+  levels: PropTypes.array
+};

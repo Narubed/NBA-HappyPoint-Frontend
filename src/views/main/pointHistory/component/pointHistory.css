@@ -1,0 +1,19 @@
+.card-hisroty {
+    box-shadow: 2px 5px #999;
+    /* background-color: antiquewhite; */
+    background-image: url('../../../../assets/images/background/buble7.png');
+    /* background-attachment: fixed; */
+    background-size: cover;
+    /* background-position: top; */
+}
+
+.card-hisroty:hover {
+    /* background-color: #3e8e41; */
+    box-shadow: 0 5px #666;
+}
+
+.card-hisroty:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}

@@ -73,7 +73,8 @@ export default function CreateMembers() {
     pvl_date_end: valueState.pvl_date_end,
     pvl_detail: valueState.pvl_detail,
     pvl_status: valueState.pvl_status,
-    pvl_image: valueState.pvl_image
+    pvl_image: valueState.pvl_image,
+    pvl_note: valueState.pvl_note
   });
   const filterLevel = [];
   if (valueState.pvl_grop_level) {
@@ -127,7 +128,8 @@ export default function CreateMembers() {
         pvl_date_start: values.pvl_date_start,
         pvl_date_end: values.pvl_date_end,
         pvl_detail: values.pvl_detail,
-        pvl_status: values.pvl_status
+        pvl_status: values.pvl_status,
+        pvl_note: values.pvl_note
       };
       Swal.fire({
         title: 'Are you sure ?',
@@ -416,6 +418,26 @@ export default function CreateMembers() {
                       </Grid>
                     </Stack>
                   </LocalizationProvider>
+                </FormControl>
+              </ListItem>
+            </Grid>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+              <ListItem disablePadding>
+                <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+                  <InputLabel color="secondary" htmlFor="pvl_note">
+                    Note หรือหมายเหตุ การใช้งานสิทธิพิเศษนี้(ใช้ก่อนวันที่หรือเงื่อนไขการใช้)
+                  </InputLabel>
+                  <Input
+                    color="secondary"
+                    id="pvl_note"
+                    value={values.pvl_note}
+                    onChange={handleChange('pvl_note')}
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <Icon icon="icon-park-twotone:edit-name" />
+                      </InputAdornment>
+                    }
+                  />
                 </FormControl>
               </ListItem>
             </Grid>

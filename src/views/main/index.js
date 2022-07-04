@@ -1,6 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/button-has-type */
 import React, { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+
 import './tabs-main.css';
 
 import UsePoint from './usePoint';
@@ -10,15 +14,72 @@ import TotalPointCard from './component/TotalPointCard';
 import TotalIncomeLightCard from './component/TotalIncomeLightCard';
 import Exp from './component/Exp';
 import MemberDetail from './component/MemberDetail';
+import NoData from './NoData';
+import PointHistory from './pointHistory';
 
 const Tabs = () => {
   const [currentTab, setCurrentTab] = useState('1');
   const [isLoading, setLoading] = useState(true);
+  const [owner, setOwner] = useState([]);
+  const [levels, setLevels] = useState([]);
 
-  useEffect(() => {
+  useEffect(async () => {
+    const memberLocal = JSON.parse(localStorage.getItem('members'));
+    const getMember = await axios.get(
+      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`
+    );
+    const getLevels = await axios.get(
+      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/level_members/`
+    );
+    if (getMember.data.data) {
+      setOwner(getMember.data.data);
+    }
+    if (getLevels.data.data) {
+      const sortDataLevels = getLevels.data.data.sort((a, b) => a.lmb_point - b.lmb_point);
+      setLevels(sortDataLevels);
+    }
+    await checkLevel();
     setLoading(false);
   }, []);
 
+  const checkLevel = async () => {
+    const memberLocal = JSON.parse(localStorage.getItem('members'));
+
+    const getMember = await axios.get(
+      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`
+    );
+    const getLevels = await axios.get(
+      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/level_members/`
+    );
+    let sortDataLevels = [];
+    if (getLevels.data.data) {
+      sortDataLevels = getLevels.data.data.sort((a, b) => a.lmb_point - b.lmb_point);
+    }
+
+    const findIndexLevel = sortDataLevels.findIndex(
+      (item) => item._id === getMember.data.data.member_level
+    );
+    const indexLevel = findIndexLevel + 1;
+    if (sortDataLevels[indexLevel]) {
+      if (getMember.data.data.member_total_point >= sortDataLevels[indexLevel].lmb_point) {
+        await axios
+          .put(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`, {
+            member_level: sortDataLevels[indexLevel]._id
+          })
+          .then(() => {
+            Swal.fire({
+              icon: 'success',
+              html: `<p style="font-size: 20px">เลื่อนขั้นเป็น ${sortDataLevels[indexLevel].lmb_name} แล้ว</p>`,
+              showConfirmButton: false,
+              timer: 1500
+            });
+            setTimeout(() => {
+              window.location.reload(false);
+            }, 1500);
+          });
+      }
+    }
+  };
   const handleTabClick = (e) => {
     setCurrentTab(e.target.id);
   };
@@ -28,15 +89,15 @@ const Tabs = () => {
       <Grid item xs={12}>
         <Grid container spacing={gridSpacing}>
           <Grid item lg={4} md={6} sm={6} xs={12}>
-            <MemberDetail isLoading={isLoading} />
+            <MemberDetail isLoading={isLoading} owner={owner} levels={levels} />
           </Grid>
           <Grid item lg={4} md={6} sm={6} xs={12}>
-            <Exp isLoading={isLoading} />
+            <Exp isLoading={isLoading} owner={owner} levels={levels} />
           </Grid>
           <Grid item lg={4} md={12} sm={12} xs={12}>
             <Grid container spacing={gridSpacing}>
               <Grid item sm={7} xs={7} md={7} lg={12}>
-                <TotalPointCard isLoading={isLoading} />
+                <TotalPointCard isLoading={isLoading} owner={owner} />
               </Grid>
               <Grid item sm={5} xs={5} md={5} lg={12}>
                 <TotalIncomeLightCard isLoading={isLoading} />
@@ -77,7 +138,7 @@ const tabs = [
     id: 1,
     tabTitle: 'ใช้ Point',
     title: 'Title 1',
-    pages: <UsePrivilege />
+    pages: <NoData />
   },
   {
     id: 2,
@@ -89,12 +150,12 @@ const tabs = [
     id: 3,
     tabTitle: 'คูปอง',
     title: 'Title 3',
-    pages: <UsePoint />
+    pages: <NoData />
   },
   {
     id: 4,
     tabTitle: 'ประวัติ',
     title: 'Title 4',
-    pages: <UsePoint />
+    pages: <PointHistory />
   }
 ];

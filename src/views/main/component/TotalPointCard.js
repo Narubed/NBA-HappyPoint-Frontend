@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-
+import numeral from 'numeral';
 // material-ui
 import { styled, useTheme } from '@mui/material/styles';
 import {
@@ -49,7 +49,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
 
 // ==============================|| DASHBOARD - TOTAL INCOME DARK CARD ||============================== //
 
-const TotalIncomeDarkCard = ({ isLoading }) => {
+const TotalIncomeDarkCard = ({ isLoading, owner }) => {
   const theme = useTheme();
 
   return (
@@ -82,7 +82,7 @@ const TotalIncomeDarkCard = ({ isLoading }) => {
                   }}
                   primary={
                     <Typography variant="h5" sx={{ color: '#fff', fontWeight: 'bold' }}>
-                      200,200,543
+                      {numeral(owner.member_current_point).format('0,0')}
                     </Typography>
                   }
                   secondary={

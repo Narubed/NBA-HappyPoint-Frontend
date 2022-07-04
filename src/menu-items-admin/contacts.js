@@ -34,6 +34,14 @@ const contacts = {
       url: '/privilege',
       icon: icons.IconReportSearch,
       breadcrumbs: false
+    },
+    {
+      id: 'ใช้พอยท์',
+      title: 'ใช้พอยท์',
+      type: 'item',
+      url: '/usePoint',
+      icon: icons.IconReportSearch,
+      breadcrumbs: false
     }
   ]
 };

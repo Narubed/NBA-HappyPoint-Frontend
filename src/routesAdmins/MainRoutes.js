@@ -16,6 +16,9 @@ const CreatePrivilege = Loadable(
 const EditPrivilege = Loadable(
   lazy(() => import('../views/admins/privilege/component/EditPrivilege'))
 );
+const UsePoint = Loadable(lazy(() => import('../views/admins/usePoint')));
+const CreateUsePoint = Loadable(lazy(() => import('../views/admins/usePoint/createUsePoint')));
+const EditUsePoint = Loadable(lazy(() => import('../views/admins/usePoint/editUsePoint')));
 
 // utilities routing
 const UtilsTypography = Loadable(lazy(() => import('../views/utilities/Typography')));
@@ -57,7 +60,18 @@ const MainRoutes = {
       path: '/privilege/edit',
       element: <EditPrivilege />
     },
-
+    {
+      path: '/usePoint',
+      element: <UsePoint />
+    },
+    {
+      path: '/usePoint/create',
+      element: <CreateUsePoint />
+    },
+    {
+      path: '/usePoint/edit',
+      element: <EditUsePoint />
+    },
     {
       path: '*',
       element: <Dashboard /> // กลับมาตั้งไฟล์ 404 ด้วย

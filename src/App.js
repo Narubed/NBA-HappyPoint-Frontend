@@ -22,6 +22,9 @@ const App = () => {
   const admins = localStorage.getItem('admins');
   const tokenMembers = JSON.parse(members);
   const tokenAdmins = JSON.parse(admins);
+  // eslint-disable-next-line no-multi-assign
+  if (process.env.NODE_ENV !== 'development') console.log = console.warn = console.error = () => {};
+
   if (!tokenMembers && !tokenAdmins) {
     return (
       <StyledEngineProvider injectFirst>

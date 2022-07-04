@@ -1,5 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, Grid, Button, Box } from '@mui/material';
 import { Icon } from '@iconify/react';
 import numeral from 'numeral';
@@ -8,6 +9,10 @@ import { replace } from 'lodash';
 import Image from '../../../../assets/images/background/buble6.png';
 
 export default function CardPrivilege({ item }) {
+  const navigate = useNavigate();
+  const onClickToDetail = () => {
+    navigate('/PrivilegeDetail', { replace: true, state: item });
+  };
   return (
     <>
       <Card
@@ -21,14 +26,9 @@ export default function CardPrivilege({ item }) {
           mt: 1
         }}
       >
-        <CardContent sx={{ p: '4px 4px 4px 4px' }}>
+        <CardContent sx={{ p: '4px' }}>
           <Grid container spacing={1} sx={{ position: 'relative', mb: -2 }}>
             <Grid item xs={4} sm={2} md={2} lg={2} sx={{ mt: 1 }}>
-              {/* <Box
-                component="img"
-                src={`${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${item.pvl_image[0]}`}
-                width="100%"
-              /> */}
               <Box
                 sx={{
                   overflow: 'hidden',
@@ -88,7 +88,10 @@ export default function CardPrivilege({ item }) {
                 Point: {numeral(item.pvl_point).format('0,0')}
               </div>
             </Grid>
-            <Button sx={{ position: 'absolute', bottom: '0px', right: '0px', color: 'purple' }}>
+            <Button
+              sx={{ position: 'absolute', bottom: '0px', right: '0px', color: 'purple' }}
+              onClick={() => onClickToDetail()}
+            >
               <div style={{ fontSize: '10px', fontWeight: 'bold' }}>แลกรางวัล</div>
             </Button>
           </Grid>

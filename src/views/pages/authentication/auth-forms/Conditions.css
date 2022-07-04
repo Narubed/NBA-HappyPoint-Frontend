@@ -1,0 +1,10 @@
+ .FontSizeConditions {
+     font-size: 16px;
+     color: #999999;
+ }
+
+ @media only screen and (max-width: 600px) {
+     .FontSizeConditions {
+         font-size: 12px;
+     }
+ }

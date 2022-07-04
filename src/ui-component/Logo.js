@@ -2,7 +2,7 @@
 // material-ui
 import { useTheme } from '@mui/material/styles';
 
-import imageLogo from '../assets/images/logo/NBAHappypoint.png';
+import imageLogo from '../assets/images/logo/NBAHappyPoint3.png';
 
 const Logo = () => {
   const theme = useTheme();
