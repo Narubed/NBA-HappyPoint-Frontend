@@ -163,7 +163,7 @@ const ProfileSection = () => {
                   boxShadow
                   shadow={theme.shadows[16]}
                 >
-                  <Box sx={{ p: 2 }}>
+                  {/* <Box sx={{ p: 2 }}>
                     <Stack>
                       <Stack direction="row" spacing={0.5} alignItems="center">
                         <Typography variant="h4">Good Morning,</Typography>
@@ -190,7 +190,7 @@ const ProfileSection = () => {
                       }}
                     />
                     <Divider />
-                  </Box>
+                  </Box> */}
                   <PerfectScrollbar
                     style={{
                       height: '100%',
@@ -199,9 +199,9 @@ const ProfileSection = () => {
                     }}
                   >
                     <Box sx={{ p: 2 }}>
-                      <UpgradePlanCard />
-                      <Divider />
-                      <Card
+                      {/* <UpgradePlanCard /> */}
+                      {/* <Divider /> */}
+                      {/* <Card
                         sx={{
                           bgcolor: theme.palette.primary.light,
                           my: 2
@@ -252,7 +252,7 @@ const ProfileSection = () => {
                             </Grid>
                           </Grid>
                         </CardContent>
-                      </Card>
+                      </Card> */}
                       <Divider />
                       <List
                         component="nav"
@@ -273,9 +273,9 @@ const ProfileSection = () => {
                         <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
                           selected={selectedIndex === 0}
-                          onClick={(event) =>
-                            handleListItemClick(event, 0, '/user/account-profile/profile1')
-                          }
+                          // onClick={(event) =>
+                          //   handleListItemClick(event, 0, '/user/account-profile/profile1')
+                          // }
                         >
                           <ListItemIcon>
                             <IconSettings stroke={1.5} size="1.3rem" />
@@ -287,9 +287,9 @@ const ProfileSection = () => {
                         <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
                           selected={selectedIndex === 1}
-                          onClick={(event) =>
-                            handleListItemClick(event, 1, '/user/social-profile/posts')
-                          }
+                          // onClick={(event) =>
+                          //   handleListItemClick(event, 1, '/user/social-profile/posts')
+                          // }
                         >
                           <ListItemIcon>
                             <IconUser stroke={1.5} size="1.3rem" />

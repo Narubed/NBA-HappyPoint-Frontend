@@ -52,7 +52,7 @@ const PopularCard = ({ isLoading }) => {
               <Grid item xs={12}>
                 <Grid container alignContent="center" justifyContent="space-between">
                   <Grid item>
-                    <Typography variant="h4">Popular Stocks</Typography>
+                    <Typography variant="h4">ตัวอย่างกรณ๊ Point เข้าออก</Typography>
                   </Grid>
                   <Grid item>
                     <MoreHorizOutlinedIcon

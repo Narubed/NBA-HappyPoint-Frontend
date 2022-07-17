@@ -23,7 +23,6 @@ export default function MediaCard() {
     const filterGropLevel = [];
     getAllPrivilege.forEach((element) => {
       const idx = element.pvl_grop_level.find((item) => item === getMember.data.data.member_level);
-      console.log(idx);
       if (idx) {
         filterGropLevel.push(element);
       }
@@ -33,7 +32,8 @@ export default function MediaCard() {
         dayjs(item.pvl_date_start).format() < dayjs(Date.now()).format() &&
         dayjs(item.pvl_date_end).format() > dayjs(Date.now()).format()
     );
-    setPrivileges(filterDateNow);
+    const filterStatus = filterDateNow.filter((item) => item.pvl_status === true);
+    setPrivileges(filterStatus);
   }, []);
   return (
     <>
