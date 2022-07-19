@@ -10,6 +10,7 @@ const Main = Loadable(lazy(() => import('../views/main')));
 const PopularCard = Loadable(lazy(() => import('../views/statistics/PopularCard')));
 const TotalGrowthBarChart = Loadable(lazy(() => import('../views/statistics/TotalGrowthBarChart')));
 const PrivilegeDetail = Loadable(lazy(() => import('../views/main/usePrivilege/privilegeDetail')));
+const UsePointDetail = Loadable(lazy(() => import('../views/main/usePoint/usePointDetail')));
 
 // utilities routing
 const UtilsTypography = Loadable(lazy(() => import('../views/utilities/Typography')));
@@ -34,6 +35,10 @@ const MainRoutes = {
     {
       path: '/PrivilegeDetail',
       element: <PrivilegeDetail />
+    },
+    {
+      path: '/UsePointDetail',
+      element: <UsePointDetail />
     },
     {
       path: '/PopularCard',
@@ -70,6 +75,10 @@ const MainRoutes = {
     {
       path: '/sample-page',
       element: <SamplePage />
+    },
+    {
+      path: '*',
+      element: <Main /> // กลับมาตั้งไฟล์ 404 ด้วย
     }
   ]
 };

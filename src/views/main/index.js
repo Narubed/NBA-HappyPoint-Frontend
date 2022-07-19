@@ -138,7 +138,7 @@ const tabs = [
     id: 1,
     tabTitle: 'ใช้ Point',
     title: 'Title 1',
-    pages: <NoData />
+    pages: <UsePoint />
   },
   {
     id: 2,

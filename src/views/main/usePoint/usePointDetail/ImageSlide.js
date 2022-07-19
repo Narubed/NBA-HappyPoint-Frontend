@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Zoom } from 'react-slideshow-image';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+
 import { Icon } from '@iconify/react';
 import IconButton from '@mui/material/IconButton';
 import numeral from 'numeral';
@@ -22,33 +24,35 @@ const zoomOutProperties = {
   pauseOnHover: true,
   scale: 0.4
 };
+
 const socket = io.connect(`${process.env.REACT_APP_HAPPY_POINT_SOCKET}`);
 
 function App({ images, isLoading, limited, state }) {
+  // const [valueReceived, setValueReceived] = useState('');
   const [valueUseing, setValueUseing] = useState(
-    state.pvl_limited_total -
-      state.pvl_useing.reduce((value, item) => value + item.member_amount, 0)
+    state.usep_limited_total -
+      state.usep_useing.reduce((value, item) => value + item.member_amount, 0)
   );
+
   let showImage = [];
   if (images) {
     showImage = images;
   }
   // let valuereduce = 0;
   // if (state) {
-  //   valuereduce = state.pvl_useing.reduce((value, item) => value + item.member_amount, 0);
+  //   valuereduce = state.usep_useing.reduce((value, item) => value + item.member_amount, 0);
   // }
-  // const valueReducer = state.pvl_limited_total - valuereduce;
+  // const valueReducer = state.usep_limited_total - valuereduce;
 
   useEffect(() => {
     const room = state._id;
     if (room !== '') {
       socket.emit('join_room', room);
     }
-    socket.on('value_useing_privilege', (data) => {
+    socket.on('value_useing_use_point', (data) => {
       setValueUseing(data.value);
     });
   }, [socket]);
-
   return (
     <>
       {isLoading ? (

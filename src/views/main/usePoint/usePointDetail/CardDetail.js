@@ -27,14 +27,13 @@ export default function CardDetail({ state }) {
   const [ownerPoint, setOwnerPoint] = React.useState(0);
   const [disabledButtonPlus, serDisabledButtonPlus] = React.useState(false);
   const [disabledButtonReduce, serDisabledButtonReduce] = React.useState(false);
-  const [limitedMember] = React.useState(state.pvl_limited_member);
+  const [limitedMember] = React.useState(state.usep_limited_member);
   const [buttonConfirm, setButtonConfirm] = React.useState(false);
-  const [limitedAmount, setLimitedAmount] = React.useState(state.pvl_limited_member);
+  const [limitedAmount, setLimitedAmount] = React.useState(state.usep_limited_member);
   const [valueUseing, setValueUseing] = React.useState(
-    state.pvl_limited_total -
-      state.pvl_useing.reduce((value, item) => value + item.member_amount, 0)
+    state.usep_limited_total -
+      state.usep_useing.reduce((value, item) => value + item.member_amount, 0)
   );
-
   const reducerAmount = () => {
     const newAmount = amount - 1;
     serDisabledButtonPlus(false);
@@ -50,9 +49,9 @@ export default function CardDetail({ state }) {
     // Check limited Amount
     let valuereduce = 0;
     if (state) {
-      valuereduce = state.pvl_useing.reduce((value, item) => value + item.member_amount, 0);
+      valuereduce = state.usep_useing.reduce((value, item) => value + item.member_amount, 0);
     }
-    const valueReducer = state.pvl_limited_total - valuereduce;
+    const valueReducer = limitedMember - valuereduce;
     if (setNewAmount >= valueReducer) {
       serDisabledButtonPlus(true);
     }
@@ -64,7 +63,8 @@ export default function CardDetail({ state }) {
     // ------------end--------------
 
     const valuePoint = setNewAmount + 1;
-    const NewValue = valuePoint * state.pvl_point;
+
+    const NewValue = valuePoint * state.usep_point;
     if (limitedAmount <= amount + 1) {
       serDisabledButtonPlus(true);
     } else if (NewValue > ownerPoint) {
@@ -76,7 +76,7 @@ export default function CardDetail({ state }) {
     if (room !== '') {
       socket.emit('join_room', room);
     }
-    socket.on('value_useing_privilege', (data) => {
+    socket.on('value_useing_use_point', (data) => {
       setValueUseing(data.value);
       if (data.value <= 1) {
         serDisabledButtonPlus(true);
@@ -89,22 +89,21 @@ export default function CardDetail({ state }) {
       }
     });
   }, [socket]);
-
   React.useEffect(async () => {
     const memberLocal = JSON.parse(localStorage.getItem('members'));
     const getMember = await axios.get(
       `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`
     );
     if (getMember.data.data) {
-      if (getMember.data.data.member_current_point < state.pvl_point) {
+      if (getMember.data.data.member_current_point < state.usep_point) {
         setButtonConfirm(true);
         serDisabledButtonPlus(true);
         serDisabledButtonReduce(true);
       }
       setOwnerPoint(getMember.data.data.member_current_point);
     }
-    if (state.pvl_useing.length !== 0) {
-      const filterId = state.pvl_useing.filter((item) => item.member_id === memberLocal._id);
+    if (state.usep_useing.length !== 0) {
+      const filterId = state.usep_useing.filter((item) => item.member_id === memberLocal._id);
       const reduceAmount = filterId.reduce((value, item) => value + item.member_amount, 0);
 
       if (limitedMember <= reduceAmount) {
@@ -160,37 +159,37 @@ export default function CardDetail({ state }) {
   };
   const putData = async () => {
     dispatch({ type: SET_LOADING, loading: true });
-    const getPrivilege = await axios.get(
-      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/privilege/${state._id}`
+    const getUsePoint = await axios.get(
+      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/use_point/${state._id}`
     );
     const memberLocal = JSON.parse(localStorage.getItem('members'));
-    const dataUseing = getPrivilege.data.data.pvl_useing;
+    const dataUseing = getUsePoint.data.data.usep_useing;
     const dataPust = {
       member_id: memberLocal._id,
       member_amount: amount,
-      payoff_point: getPrivilege.data.data.pvl_point,
+      payoff_point: getUsePoint.data.data.usep_point,
       member_timestamp: dayjs(Date.now()).format()
     };
     dataUseing.push(dataPust);
-    const dataPrivilege = getPrivilege.data.data;
+    const dataUsePoint = getUsePoint.data.data;
     const reportHistory = {
       rph_member_id: memberLocal._id,
-      rph_name: dataPrivilege.pvl_name,
+      rph_name: dataUsePoint.usep_name,
       rph_amount: amount,
-      rph_point: dataPrivilege.pvl_point * amount,
-      rph_detail: dataPrivilege.pvl_detail,
+      rph_point: dataUsePoint.usep_point * amount,
+      rph_detail: dataUsePoint.usep_detail,
       rph_type: 'ใช้พอยท์',
       rph_timestamp: dayjs(Date.now()).format(),
       rph_status: 'ใช้งานแล้ว',
-      rph_note: dataPrivilege.pvl_note ? dataPrivilege.pvl_note : 'ไม่มี'
+      rph_note: dataUsePoint.usep_note ? dataUsePoint.usep_note : 'ไม่มี'
     };
     await axios.put(
-      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/privilege/${getPrivilege.data.data._id}`,
+      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/use_point/${getUsePoint.data.data._id}`,
       {
-        pvl_useing: dataUseing
+        usep_useing: dataUseing
       }
     );
-    const dataPutpoint = ownerPoint - getPrivilege.data.data.pvl_point * amount;
+    const dataPutpoint = ownerPoint - getUsePoint.data.data.usep_point * amount;
     if (dataPutpoint > 0) {
       await axios.put(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`, {
         member_current_point: dataPutpoint
@@ -198,29 +197,29 @@ export default function CardDetail({ state }) {
     }
 
     await axios.post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/report_history`, reportHistory);
-    await sendProivilege();
+    await sendUsePoint();
     dispatch({ type: SET_LOADING, loading: false });
   };
-  const sendProivilege = () => {
+  const sendUsePoint = () => {
     const room = state._id;
-    socket.emit('send_privilege', { room });
+    socket.emit('send_use_point', { room });
   };
   return (
     <Card>
       <CardActionArea>
         <CardContent>
           <Typography gutterBottom variant="h4" component="div" color="secondary">
-            {state.pvl_name}
+            {state.usep_name}
           </Typography>
           {/* <Typography variant="body2" color="text.secondary"> */}
-          {/* {state.pvl_detail} */}
-          {parse(state.pvl_detail)}
+          {/* {state.usep_detail} */}
+          {parse(state.usep_detail)}
           {/* </Typography> */}
         </CardContent>
       </CardActionArea>
       <Typography gutterBottom variant="h6" component="div" color="error" sx={{ p: '0px 12px' }}>
         ***หมดเขต:{' '}
-        {dayjs(state.pvl_date_end).add(543, 'year').locale('th').format('D MMM  YYYY h:mm A')}
+        {dayjs(state.usep_date_end).add(543, 'year').locale('th').format('D MMM  YYYY h:mm A')}
       </Typography>
       <CardActions>
         <Grid item xs={12} sx={{ display: 'flex' }}>
@@ -233,7 +232,7 @@ export default function CardDetail({ state }) {
                 marginTop: '4px'
               }}
             >
-              ต้องใช้ {numeral(state.pvl_point * amount).format('0,0')} Point
+              ต้องใช้ {numeral(state.usep_point * amount).format('0,0')} Point
             </div>
           </Grid>
           <Grid item lg={3.5} md={3.5} sm={3.5} xs={3.5} sx={{ display: 'flex' }}>

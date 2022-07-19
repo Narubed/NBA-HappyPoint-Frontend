@@ -1,58 +1,53 @@
-/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react';
-import { useTheme, styled } from '@mui/material/styles';
-import './usePoint.scss';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import Button from '@mui/material/Button';
-import CardHeader from '@mui/material/CardHeader';
+import axios from 'axios';
+import dayjs from 'dayjs';
+import 'dayjs/locale/th';
+import { Card, CardContent, Typography, CardActions, Grid, Button, Box } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
-import CardActions from '@mui/material/CardActions';
+import CardUsePoint from './component/CardUsePoint';
 
-import Grid from '@mui/material/Grid';
+export default function MediaCard() {
+  const [usePoint, setUsePoint] = React.useState([]);
+  React.useEffect(async () => {
+    let getAllUsePoint = [];
+    await axios
+      .get(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/use_point`)
+      .then((res) => (getAllUsePoint = res.data.data.reverse()));
 
-export default function MediaControlCard() {
-  const theme = useTheme();
-
-  const arrayTest = [1, 2, 3, 4, 5];
+    const memberLocal = JSON.parse(localStorage.getItem('members'));
+    const getMember = await axios.get(
+      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`
+    );
+    const filterGropLevel = [];
+    getAllUsePoint.forEach((element) => {
+      const idx = element.usep_grop_level.find((item) => item === getMember.data.data.member_level);
+      if (idx) {
+        filterGropLevel.push(element);
+      }
+    });
+    const filterDateNow = filterGropLevel.filter(
+      (item) =>
+        dayjs(item.usep_date_start).format() < dayjs(Date.now()).format() &&
+        dayjs(item.usep_date_end).format() > dayjs(Date.now()).format()
+    );
+    const filterStatus = filterDateNow.filter((item) => item.usep_status === true);
+    setUsePoint(filterStatus);
+  }, []);
   return (
-    <Grid>
-      <Grid container spacing={2}>
-        {arrayTest.map((value) => (
-          <Grid item xs={6} sm={6} md={6} lg={4} key={value}>
-            <div className="blog-card alt" key={value}>
-              <div className="meta">
-                <div
-                  className="photo"
-                  style={{
-                    backgroundImage: `url(${process.env.REACT_APP_DRIVE_SELECT_IMAGE}19HxDLYncC_7OclroZ1aUGDt-MrJAX439)`
-                  }}
-                />
-              </div>
-              <div className="description">
-                <h2>แลกหมวก NBAExpress</h2>
-                {/* <h2>Java is not the same as JavaScript</h2> */}
-                <p>
-                  เงื่อนไขการรับสินค้านี้ต้องมีแต้มรวม5,000,000 Point
-                  หลังจากกดแลกเเล้วกรุณาตรวจสอบที่อยู่ที่ต้องการจัดส่งให้เรียบร้อย.
-                </p>
-                <p className="read-more">
-                  <Button color="secondary" variant="outlined" href="#">
-                    คลิ๊กเลย
-                  </Button>
-                </p>
-              </div>
-            </div>
-          </Grid>
-        ))}
-      </Grid>
-    </Grid>
+    <>
+      {usePoint.length === 0 ? (
+        'ไม่มีข้อมูล'
+      ) : (
+        <Grid container spacing={1} position="flex">
+          {usePoint.map((item) => (
+            <Grid item xs={12} sm={6} md={6} lg={6} sx={{ mt: 1 }} key={item._id}>
+              <CardUsePoint item={item} key={item._id} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
+    </>
   );
 }

@@ -102,7 +102,6 @@ export default function User() {
         Privileges.push({ ...element, levels: levelName });
       });
     }
-    console.log(Privileges);
     setUsePointslist(Privileges.reverse());
   }, []);
   const handleRequestSort = (event, property) => {

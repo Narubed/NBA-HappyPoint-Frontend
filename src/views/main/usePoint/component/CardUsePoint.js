@@ -6,18 +6,18 @@ import { Icon } from '@iconify/react';
 import numeral from 'numeral';
 import { replace } from 'lodash';
 
-import Image from '../../../../assets/images/background/buble6.png';
+import Image from '../../../../assets/images/background/bubbly.jpg';
 
-export default function CardPrivilege({ item }) {
+export default function CardUsePoint({ item }) {
   const navigate = useNavigate();
   const [disabledButton, setDisabledButton] = React.useState(false);
   React.useEffect(() => {
     // Check limited Amount
     let valuereduce = 0;
     if (item) {
-      valuereduce = item.pvl_useing.reduce((value, item) => value + item.member_amount, 0);
+      valuereduce = item.usep_useing.reduce((value, item) => value + item.member_amount, 0);
     }
-    const valueReducer = item.pvl_limited_total - valuereduce;
+    const valueReducer = item.usep_limited_total - valuereduce;
     if (valueReducer <= 0) {
       setDisabledButton(true);
     }
@@ -25,7 +25,7 @@ export default function CardPrivilege({ item }) {
   }, []);
 
   const onClickToDetail = () => {
-    navigate('/PrivilegeDetail', { replace: true, state: item });
+    navigate('/UsePointDetail', { replace: true, state: item });
   };
   return (
     <>
@@ -79,12 +79,12 @@ export default function CardPrivilege({ item }) {
                       }}
                     />{' '}
                     {/* 200,000 */}
-                    {replace(numeral(item.pvl_point).format('0.00a'), '.00', '')}
+                    {replace(numeral(item.usep_point).format('0.00a'), '.00', '')}
                   </div>
                 </Box>
                 <Box
                   component="img"
-                  src={`${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${item.pvl_image[0]}`}
+                  src={`${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${item.usep_image[0]}`}
                   width="100%"
                   my="auto"
                 />
@@ -94,12 +94,12 @@ export default function CardPrivilege({ item }) {
               <div
                 style={{ fontSize: '12px', color: 'purple', fontWeight: 'bold', marginTop: '14px' }}
               >
-                {item.pvl_name}
+                {item.usep_name}
               </div>
               <div
                 style={{ fontSize: '10px', color: 'purple', fontWeight: 'bold', marginTop: '14px' }}
               >
-                Point: {numeral(item.pvl_point).format('0,0')}
+                Point: {numeral(item.usep_point).format('0,0')}
               </div>
             </Grid>
             <Button
@@ -119,6 +119,6 @@ export default function CardPrivilege({ item }) {
     </>
   );
 }
-CardPrivilege.propTypes = {
+CardUsePoint.propTypes = {
   item: PropTypes.object
 };
