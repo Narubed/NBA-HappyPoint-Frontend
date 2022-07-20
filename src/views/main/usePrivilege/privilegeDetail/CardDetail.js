@@ -198,9 +198,20 @@ export default function CardDetail({ state }) {
     }
 
     await axios.post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/report_history`, reportHistory);
+    const pointHistory = {
+      ph_member_id: memberLocal._id,
+      ph_title: 'แลกสิทธิพิเศษ',
+      ph_detail: dataPrivilege.pvl_name,
+      ph_point: dataPrivilege.pvl_point * amount,
+      ph_type: 'จ่ายออก',
+      ph_timestamp: dayjs(Date.now()).format()
+    };
+    await axios.post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/point_history`, pointHistory);
+
     await sendProivilege();
     dispatch({ type: SET_LOADING, loading: false });
   };
+
   const sendProivilege = () => {
     const room = state._id;
     socket.emit('send_privilege', { room });

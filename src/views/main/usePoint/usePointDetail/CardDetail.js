@@ -197,7 +197,17 @@ export default function CardDetail({ state }) {
     }
 
     await axios.post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/report_history`, reportHistory);
+    const pointHistory = {
+      ph_member_id: memberLocal._id,
+      ph_title: 'ใช้ Point แลกของรางวัล',
+      ph_detail: dataUsePoint.usep_name,
+      ph_point: dataUsePoint.usep_point * amount,
+      ph_type: 'จ่ายออก',
+      ph_timestamp: dayjs(Date.now()).format()
+    };
+    await axios.post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/point_history`, pointHistory);
     await sendUsePoint();
+
     dispatch({ type: SET_LOADING, loading: false });
   };
   const sendUsePoint = () => {
