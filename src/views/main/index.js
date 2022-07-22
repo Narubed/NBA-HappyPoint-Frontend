@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { useDispatch } from 'react-redux';
 
 import './tabs-main.css';
 
@@ -16,14 +17,17 @@ import Exp from './component/Exp';
 import MemberDetail from './component/MemberDetail';
 import NoData from './NoData';
 import PointHistory from './pointHistory';
+import { SET_LOADING } from '../../store/actions';
 
 const Tabs = () => {
+  const dispatch = useDispatch();
   const [currentTab, setCurrentTab] = useState('1');
   const [isLoading, setLoading] = useState(true);
   const [owner, setOwner] = useState([]);
   const [levels, setLevels] = useState([]);
 
   useEffect(async () => {
+    dispatch({ type: SET_LOADING, loading: true });
     const memberLocal = JSON.parse(localStorage.getItem('members'));
     const getMember = await axios.get(
       `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`
@@ -40,6 +44,7 @@ const Tabs = () => {
     }
     await checkLevel();
     setLoading(false);
+    dispatch({ type: SET_LOADING, loading: false });
   }, []);
 
   const checkLevel = async () => {

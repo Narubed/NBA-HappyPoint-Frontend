@@ -132,7 +132,6 @@ export default function User() {
     setFilterName(event.target.value);
   };
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - usePointslist.length) : 0;
-
   const filteredUsers = applySortFilter(usePointslist, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;

@@ -37,6 +37,8 @@ const PopularCard = () => {
   const [isLoading, setLoading] = useState(true);
   const [pointHistory, setPointHistory] = useState([]);
   const [member, setMember] = useState([]);
+  const [viewValue, setViewValue] = useState(5);
+  const [page, setPage] = useState(0);
 
   useEffect(async () => {
     const memberLocal = JSON.parse(localStorage.getItem('members'));
@@ -53,6 +55,13 @@ const PopularCard = () => {
     setLoading(false);
   }, []);
 
+  useEffect(async () => {
+    setPage(pointHistory.length + viewValue);
+  }, [viewValue]);
+
+  const addViewValue = () => {
+    setViewValue(viewValue + 5);
+  };
   return (
     <>
       {isLoading ? (
@@ -107,15 +116,15 @@ const PopularCard = () => {
                 />
               </Grid>
               <Grid item xs={12}>
-                {pointHistory.map((item) => (
+                {pointHistory.slice(0, page).map((item) => (
                   <AreaCardDetail key={item._id} isLoading={isLoading} pointHistory={item} />
                 ))}
               </Grid>
             </Grid>
           </CardContent>
           <CardActions sx={{ p: 1.25, pt: 0, justifyContent: 'center' }}>
-            <Button size="small" disableElevation>
-              View All
+            <Button size="small" disableElevation onClick={() => addViewValue()}>
+              ดูเพิ่มเติม
               <ChevronRightOutlinedIcon />
             </Button>
           </CardActions>

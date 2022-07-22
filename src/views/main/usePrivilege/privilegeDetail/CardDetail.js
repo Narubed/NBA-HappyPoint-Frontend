@@ -14,11 +14,11 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import 'dayjs/locale/th';
 import Swal from 'sweetalert2';
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
 
 import { SET_LOADING } from '../../../../store/actions';
 
-const socket = io.connect(`${process.env.REACT_APP_HAPPY_POINT_SOCKET}`);
+// const socket = io.connect(`${process.env.REACT_APP_HAPPY_POINT_SOCKET}`);
 
 export default function CardDetail({ state }) {
   const navigate = useNavigate();
@@ -71,24 +71,24 @@ export default function CardDetail({ state }) {
       serDisabledButtonPlus(true);
     }
   };
-  React.useEffect(() => {
-    const room = state._id;
-    if (room !== '') {
-      socket.emit('join_room', room);
-    }
-    socket.on('value_useing_privilege', (data) => {
-      setValueUseing(data.value);
-      if (data.value <= 1) {
-        serDisabledButtonPlus(true);
-        serDisabledButtonReduce(true);
-      }
+  // React.useEffect(() => {
+  //   const room = state._id;
+  //   if (room !== '') {
+  //     socket.emit('join_room', room);
+  //   }
+  //   socket.on('value_useing_privilege', (data) => {
+  //     setValueUseing(data.value);
+  //     if (data.value <= 1) {
+  //       serDisabledButtonPlus(true);
+  //       serDisabledButtonReduce(true);
+  //     }
 
-      if (data.value <= 0) {
-        Swal.fire('สิทธิคงเหลือหมดแล้ว');
-        navigate('/', { replace: true });
-      }
-    });
-  }, [socket]);
+  //     if (data.value <= 0) {
+  //       Swal.fire('สิทธิคงเหลือหมดแล้ว');
+  //       navigate('/', { replace: true });
+  //     }
+  //   });
+  // }, [socket]);
 
   React.useEffect(async () => {
     const memberLocal = JSON.parse(localStorage.getItem('members'));
@@ -132,7 +132,7 @@ export default function CardDetail({ state }) {
         navigate('/', { replace: true });
       }
     }
-  }, [socket]);
+  }, []);
   const onClickConfirm = async () => {
     Swal.fire({
       title: 'ยืนยันการทำรายการ ?',
@@ -208,14 +208,14 @@ export default function CardDetail({ state }) {
     };
     await axios.post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/point_history`, pointHistory);
 
-    await sendProivilege();
+    // await sendProivilege();
     dispatch({ type: SET_LOADING, loading: false });
   };
 
-  const sendProivilege = () => {
-    const room = state._id;
-    socket.emit('send_privilege', { room });
-  };
+  // const sendProivilege = () => {
+  //   const room = state._id;
+  //   socket.emit('send_privilege', { room });
+  // };
   return (
     <Card>
       <CardActionArea>

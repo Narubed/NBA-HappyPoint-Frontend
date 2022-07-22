@@ -53,6 +53,7 @@ const FirebaseLogin = ({ ...others }) => {
     event.preventDefault();
   };
   const handleLogin = async (values) => {
+    console.log(process.env.REACT_APP_HAPPY_POINT_BACKEND);
     const data = {
       member_phone_number: values.phone,
       member_password: values.password

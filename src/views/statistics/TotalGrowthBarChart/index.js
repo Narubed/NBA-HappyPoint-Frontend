@@ -1,166 +1,62 @@
-import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/rules-of-hooks */
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import axios from 'axios';
+// import dayjs from 'dayjs';
+import GrowBarChart from './component/GrowBarChart';
+import { SET_LOADING } from '../../../store/actions';
+import ChangeDateChart from './component/ChangeDateChart';
+import NewChangeDateChart from './component/NewChangeDateChart';
 
-// material-ui
-import { useTheme } from '@mui/material/styles';
-import { Grid, MenuItem, TextField, Typography } from '@mui/material';
+export default function index() {
+  const dispatch = useDispatch();
+  const [isLoading, setLoading] = useState(true);
+  const [isPointHistory, setPointHistory] = useState([]);
+  const [isFilterDate, setFilterDate] = useState([]);
+  const [isNumberMonth, setNumberMonth] = useState([]);
+  const [isOwner, setOwner] = useState([]);
 
-// third-party
-import ApexCharts from 'apexcharts';
-import Chart from 'react-apexcharts';
+  useEffect(async () => {
+    dispatch({ type: SET_LOADING, loading: true });
+    const memberLocal = JSON.parse(localStorage.getItem('members'));
+    let getPointHistory = [];
+    await axios
+      .get(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`)
+      .then((res) => setOwner(res.data.data));
 
-// project imports
-import SkeletonTotalGrowthBarChart from '../../../ui-component/cards/Skeleton/TotalGrowthBarChart';
-import MainCard from '../../../ui-component/cards/MainCard';
-import { gridSpacing } from '../../../store/constant';
+    await axios
+      .get(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/point_history/member/${memberLocal._id}`)
+      .then((res) => (getPointHistory = res.data.data));
 
-// chart data
-import chartData from '../chart-data/total-growth-bar-chart';
+    const filterStatus = getPointHistory.filter((item) => item.ph_type === 'รับเข้า');
+    // ChangeDateChart({ filterStatus, setFilterDate });
 
-const status = [
-  {
-    value: 'today',
-    label: 'Today'
-  },
-  {
-    value: 'month',
-    label: 'This Month'
-  },
-  {
-    value: 'year',
-    label: 'This Year'
-  }
-];
+    await NewChangeDateChart({ filterStatus, setFilterDate, setNumberMonth });
 
-// ==============================|| DASHBOARD DEFAULT - TOTAL GROWTH BAR CHART ||============================== //
-
-const TotalGrowthBarChart = ({ isLoading }) => {
-  const [value, setValue] = useState('today');
-  const theme = useTheme();
-  const customization = useSelector((state) => state.customization);
-
-  const { navType } = customization;
-  const { primary } = theme.palette.text;
-  const darkLight = theme.palette.dark.light;
-  const grey200 = theme.palette.grey[200];
-  const grey500 = theme.palette.grey[500];
-
-  const primary200 = theme.palette.primary[200];
-  const primaryDark = theme.palette.primary.dark;
-  const secondaryMain = theme.palette.secondary.main;
-  const secondaryLight = theme.palette.secondary.light;
-
-  useEffect(() => {
-    const newChartData = {
-      ...chartData.options,
-      colors: [primary200, primaryDark, secondaryMain, secondaryLight],
-      xaxis: {
-        labels: {
-          style: {
-            colors: [
-              primary,
-              primary,
-              primary,
-              primary,
-              primary,
-              primary,
-              primary,
-              primary,
-              primary,
-              primary,
-              primary,
-              primary
-            ]
-          }
-        }
-      },
-      yaxis: {
-        labels: {
-          style: {
-            colors: [primary]
-          }
-        }
-      },
-      grid: {
-        borderColor: grey200
-      },
-      tooltip: {
-        theme: 'light'
-      },
-      legend: {
-        labels: {
-          colors: grey500
-        }
+    const newValuePointHistory = [];
+    filterStatus.forEach((element) => {
+      const idx = newValuePointHistory.findIndex((item) => item.ph_title === element.ph_title);
+      if (idx === -1) {
+        newValuePointHistory.push(element);
+      } else {
+        newValuePointHistory[idx].ph_point += element.ph_point;
       }
-    };
-
-    // do not load chart when loading
-    if (!isLoading) {
-      ApexCharts.exec(`bar-chart`, 'updateOptions', newChartData);
-    }
-  }, [
-    navType,
-    primary200,
-    primaryDark,
-    secondaryMain,
-    secondaryLight,
-    primary,
-    darkLight,
-    grey200,
-    isLoading,
-    grey500
-  ]);
+    });
+    setPointHistory(filterStatus);
+    setLoading(false);
+    dispatch({ type: SET_LOADING, loading: false });
+  }, []);
 
   return (
-    <>
-      {isLoading ? (
-        <SkeletonTotalGrowthBarChart />
-      ) : (
-        <MainCard>
-          <Grid container spacing={gridSpacing}>
-            <Grid item xs={12}>
-              <Grid container alignItems="center" justifyContent="space-between">
-                <Grid item>
-                  <Grid container direction="column" spacing={1}>
-                    <Grid item>
-                      <Typography variant="subtitle2">
-                        เป็นขอมูลสำหรับการทดสอบเพื่อเเสดงผลเท่านั้น
-                      </Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="h3">500,000 Point</Typography>
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Grid item>
-                  <TextField
-                    id="standard-select-currency"
-                    select
-                    value={value}
-                    onChange={(e) => setValue(e.target.value)}
-                  >
-                    {status.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item xs={12}>
-              <Chart {...chartData} />
-            </Grid>
-          </Grid>
-        </MainCard>
-      )}
-    </>
+    <div>
+      <GrowBarChart
+        isLoading={isLoading}
+        isPointHistory={isPointHistory}
+        isFilterDate={isFilterDate}
+        isNumberMonth={isNumberMonth}
+        isOwner={isOwner}
+      />
+    </div>
   );
-};
-
-TotalGrowthBarChart.propTypes = {
-  isLoading: PropTypes.bool
-};
-
-export default TotalGrowthBarChart;
+}

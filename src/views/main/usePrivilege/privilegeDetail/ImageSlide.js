@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import { Icon } from '@iconify/react';
 import IconButton from '@mui/material/IconButton';
 import numeral from 'numeral';
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
 import { useNavigate, BrowserRouter as Router, useLocation } from 'react-router-dom';
 import SkeletonEarningCard from '../../../../ui-component/cards/Skeleton/EarningCard';
 
@@ -22,7 +22,7 @@ const zoomOutProperties = {
   pauseOnHover: true,
   scale: 0.4
 };
-const socket = io.connect(`${process.env.REACT_APP_HAPPY_POINT_SOCKET}`);
+// const socket = io.connect(`${process.env.REACT_APP_HAPPY_POINT_SOCKET}`);
 
 function App({ images, isLoading, limited, state }) {
   const [valueUseing, setValueUseing] = useState(
@@ -39,15 +39,15 @@ function App({ images, isLoading, limited, state }) {
   // }
   // const valueReducer = state.pvl_limited_total - valuereduce;
 
-  useEffect(() => {
-    const room = state._id;
-    if (room !== '') {
-      socket.emit('join_room', room);
-    }
-    socket.on('value_useing_privilege', (data) => {
-      setValueUseing(data.value);
-    });
-  }, [socket]);
+  // useEffect(() => {
+  //   const room = state._id;
+  //   if (room !== '') {
+  //     socket.emit('join_room', room);
+  //   }
+  //   socket.on('value_useing_privilege', (data) => {
+  //     setValueUseing(data.value);
+  //   });
+  // }, [socket]);
 
   return (
     <>

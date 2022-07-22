@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react';
 import axios from 'axios';
-import dayjs from 'dayjs';
-import 'dayjs/locale/th';
 import { Card, CardContent, Typography, CardActions, Grid, Button, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CardPointHistory from './component/CardPointHistory';
