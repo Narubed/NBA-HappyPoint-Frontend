@@ -64,7 +64,12 @@ export default function CreateMembers({ showDrawer, setDrawer, levels }) {
       };
       dispatch({ type: SET_LOADING, loading: true });
       await axios
-        .post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members`, data)
+        .post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members`, data, {
+          headers: {
+            secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+            token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+          }
+        })
         .then(() => {
           Swal.fire({
             icon: 'success',

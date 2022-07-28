@@ -58,8 +58,8 @@ const useStyles = makeStyles((theme) => ({
 export default function RegisterForm() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [open, setOpen] = React.useState(false);
-  const [newOTP, setNewOTP] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [newOTP, setNewOTP] = useState(false);
   const [OTP, setOTP] = useState('');
   const [value, setValue] = useState({
     firstName: '',
@@ -69,8 +69,8 @@ export default function RegisterForm() {
     phone: ''
   });
   const [mathRandom, setMathRandom] = useState();
-  const [errorOTP, setERROROTP] = React.useState(false);
-  const [disabledButton, setDisabledButton] = React.useState(true);
+  const [errorOTP, setERROROTP] = useState(false);
+  const [disabledButton, setDisabledButton] = useState(true);
 
   const RegisterSchema = Yup.object().shape({
     phone: Yup.string()
@@ -81,7 +81,7 @@ export default function RegisterForm() {
     lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('กรุณากรอกนามสกุล'),
     address: Yup.string()
       .min(6, 'Too Short!')
-      .max(50, 'Too Long!')
+      .max(5000, 'Too Long!')
       .required('กรุณากรอกที่อยู่สำหรับจัดส่งของด้วย'),
     password: Yup.string().required('กรุณาใส่รหัสผ่าน 6 ตัวขึ้นไป')
   });
@@ -93,8 +93,14 @@ export default function RegisterForm() {
     const randomMath = Math.floor(Math.random() * (999999 - 100000) + 100000);
     console.log(randomMath);
     let status = false;
+    const headerConfig = {
+      headers: {
+        secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+        token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+      }
+    };
     await axios
-      .get(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/phone/${result}`)
+      .get(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/phone/${result}`, headerConfig)
       .then((res) => {
         if (res.data.data.length === 0) {
           status = false;
@@ -199,8 +205,14 @@ export default function RegisterForm() {
         member_address: value.address,
         member_password: value.password
       };
+      const headerConfig = {
+        headers: {
+          secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+          token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+        }
+      };
       await axios
-        .post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members`, data)
+        .post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members`, data, headerConfig)
         .catch((error) => console.log(error));
       Swal.fire({
         icon: 'success',

@@ -10,7 +10,13 @@ export default function MediaCard() {
   React.useEffect(async () => {
     const memberLocal = JSON.parse(localStorage.getItem('members'));
     const getMember = await axios.get(
-      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/report_history/member/${memberLocal._id}`
+      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/report_history/member/${memberLocal._id}`,
+      {
+        headers: {
+          secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+          token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+        }
+      }
     );
 
     setHistory(getMember.data.data.reverse());

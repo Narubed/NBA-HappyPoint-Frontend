@@ -93,7 +93,13 @@ export default function CardDetail({ state }) {
   React.useEffect(async () => {
     const memberLocal = JSON.parse(localStorage.getItem('members'));
     const getMember = await axios.get(
-      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`
+      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`,
+      {
+        headers: {
+          secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+          token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+        }
+      }
     );
     if (getMember.data.data) {
       if (getMember.data.data.member_current_point < state.pvl_point) {
@@ -161,7 +167,13 @@ export default function CardDetail({ state }) {
   const putData = async () => {
     dispatch({ type: SET_LOADING, loading: true });
     const getPrivilege = await axios.get(
-      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/privilege/${state._id}`
+      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/privilege/${state._id}`,
+      {
+        headers: {
+          secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+          token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+        }
+      }
     );
     const memberLocal = JSON.parse(localStorage.getItem('members'));
     const dataUseing = getPrivilege.data.data.pvl_useing;
@@ -188,16 +200,36 @@ export default function CardDetail({ state }) {
       `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/privilege/${getPrivilege.data.data._id}`,
       {
         pvl_useing: dataUseing
+      },
+      {
+        headers: {
+          secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+          token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+        }
       }
     );
     const dataPutpoint = ownerPoint - getPrivilege.data.data.pvl_point * amount;
     if (dataPutpoint > 0) {
-      await axios.put(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`, {
-        member_current_point: dataPutpoint
-      });
+      await axios.put(
+        `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`,
+        {
+          member_current_point: dataPutpoint
+        },
+        {
+          headers: {
+            secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+            token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+          }
+        }
+      );
     }
 
-    await axios.post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/report_history`, reportHistory);
+    await axios.post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/report_history`, reportHistory, {
+      headers: {
+        secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+        token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+      }
+    });
     const pointHistory = {
       ph_member_id: memberLocal._id,
       ph_title: 'แลกสิทธิพิเศษ',
@@ -206,7 +238,12 @@ export default function CardDetail({ state }) {
       ph_type: 'จ่ายออก',
       ph_timestamp: dayjs(Date.now()).format()
     };
-    await axios.post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/point_history`, pointHistory);
+    await axios.post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/point_history`, pointHistory, {
+      headers: {
+        secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+        token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+      }
+    });
 
     // await sendProivilege();
     dispatch({ type: SET_LOADING, loading: false });

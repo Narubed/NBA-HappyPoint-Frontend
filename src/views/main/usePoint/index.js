@@ -13,12 +13,23 @@ export default function MediaCard() {
   React.useEffect(async () => {
     let getAllUsePoint = [];
     await axios
-      .get(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/use_point`)
+      .get(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/use_point`, {
+        headers: {
+          secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+          token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+        }
+      })
       .then((res) => (getAllUsePoint = res.data.data.reverse()));
 
     const memberLocal = JSON.parse(localStorage.getItem('members'));
     const getMember = await axios.get(
-      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`
+      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`,
+      {
+        headers: {
+          secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+          token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+        }
+      }
     );
     const filterGropLevel = [];
     getAllUsePoint.forEach((element) => {

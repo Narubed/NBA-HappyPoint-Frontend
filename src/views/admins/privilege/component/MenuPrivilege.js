@@ -38,11 +38,21 @@ export default function MenuContacts({ item, levels }) {
     }).then(async (result) => {
       if (result.isConfirmed) {
         dispatch({ type: SET_LOADING, loading: true });
-        await axios.delete(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/privilege/${item._id}`);
+        await axios.delete(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/privilege/${item._id}`, {
+          headers: {
+            secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+            token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+          }
+        });
         await pvl_image.map(
           async (imageName) =>
             await axios
-              .delete(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/deleteImage/${imageName}`)
+              .delete(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/deleteImage/${imageName}`, {
+                headers: {
+                  secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+                  token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+                }
+              })
               .then(() => {
                 Swal.fire({
                   icon: 'success',
@@ -62,7 +72,13 @@ export default function MenuContacts({ item, levels }) {
   };
   const nanigateEdit = async () => {
     const getLevel = await axios.get(
-      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/level_members`
+      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/level_members`,
+      {
+        headers: {
+          secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+          token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+        }
+      }
     );
     navigate('/privilege/edit', { replace: true, state: { ...item, levels: getLevel.data.data } });
   };

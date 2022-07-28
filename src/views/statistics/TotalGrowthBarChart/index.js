@@ -6,7 +6,7 @@ import axios from 'axios';
 // import dayjs from 'dayjs';
 import GrowBarChart from './component/GrowBarChart';
 import { SET_LOADING } from '../../../store/actions';
-import ChangeDateChart from './component/ChangeDateChart';
+// import ChangeDateChart from './component/ChangeDateChart';
 import NewChangeDateChart from './component/NewChangeDateChart';
 
 export default function index() {
@@ -22,11 +22,21 @@ export default function index() {
     const memberLocal = JSON.parse(localStorage.getItem('members'));
     let getPointHistory = [];
     await axios
-      .get(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`)
+      .get(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`, {
+        headers: {
+          secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+          token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+        }
+      })
       .then((res) => setOwner(res.data.data));
 
     await axios
-      .get(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/point_history/member/${memberLocal._id}`)
+      .get(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/point_history/member/${memberLocal._id}`, {
+        headers: {
+          secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+          token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+        }
+      })
       .then((res) => (getPointHistory = res.data.data));
 
     const filterStatus = getPointHistory.filter((item) => item.ph_type === 'รับเข้า');

@@ -92,7 +92,13 @@ export default function CardDetail({ state }) {
   React.useEffect(async () => {
     const memberLocal = JSON.parse(localStorage.getItem('members'));
     const getMember = await axios.get(
-      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`
+      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`,
+      {
+        headers: {
+          secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+          token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+        }
+      }
     );
     if (getMember.data.data) {
       if (getMember.data.data.member_current_point < state.usep_point) {
@@ -160,7 +166,13 @@ export default function CardDetail({ state }) {
   const putData = async () => {
     dispatch({ type: SET_LOADING, loading: true });
     const getUsePoint = await axios.get(
-      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/use_point/${state._id}`
+      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/use_point/${state._id}`,
+      {
+        headers: {
+          secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+          token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+        }
+      }
     );
     const memberLocal = JSON.parse(localStorage.getItem('members'));
     const dataUseing = getUsePoint.data.data.usep_useing;
@@ -187,16 +199,36 @@ export default function CardDetail({ state }) {
       `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/use_point/${getUsePoint.data.data._id}`,
       {
         usep_useing: dataUseing
+      },
+      {
+        headers: {
+          secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+          token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+        }
       }
     );
     const dataPutpoint = ownerPoint - getUsePoint.data.data.usep_point * amount;
     if (dataPutpoint > 0) {
-      await axios.put(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`, {
-        member_current_point: dataPutpoint
-      });
+      await axios.put(
+        `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`,
+        {
+          member_current_point: dataPutpoint
+        },
+        {
+          headers: {
+            secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+            token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+          }
+        }
+      );
     }
 
-    await axios.post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/report_history`, reportHistory);
+    await axios.post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/report_history`, reportHistory, {
+      headers: {
+        secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+        token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+      }
+    });
     const pointHistory = {
       ph_member_id: memberLocal._id,
       ph_title: 'ใช้ Point แลกของรางวัล',
@@ -205,7 +237,12 @@ export default function CardDetail({ state }) {
       ph_type: 'จ่ายออก',
       ph_timestamp: dayjs(Date.now()).format()
     };
-    await axios.post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/point_history`, pointHistory);
+    await axios.post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/point_history`, pointHistory, {
+      headers: {
+        secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+        token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+      }
+    });
     // await sendUsePoint();
 
     dispatch({ type: SET_LOADING, loading: false });

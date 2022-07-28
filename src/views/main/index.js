@@ -30,10 +30,22 @@ const Tabs = () => {
     dispatch({ type: SET_LOADING, loading: true });
     const memberLocal = JSON.parse(localStorage.getItem('members'));
     const getMember = await axios.get(
-      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`
+      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`,
+      {
+        headers: {
+          secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+          token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+        }
+      }
     );
     const getLevels = await axios.get(
-      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/level_members/`
+      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/level_members/`,
+      {
+        headers: {
+          secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+          token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+        }
+      }
     );
     if (getMember.data.data) {
       setOwner(getMember.data.data);
@@ -51,10 +63,22 @@ const Tabs = () => {
     const memberLocal = JSON.parse(localStorage.getItem('members'));
 
     const getMember = await axios.get(
-      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`
+      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`,
+      {
+        headers: {
+          secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+          token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+        }
+      }
     );
     const getLevels = await axios.get(
-      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/level_members/`
+      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/level_members/`,
+      {
+        headers: {
+          secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+          token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+        }
+      }
     );
     let sortDataLevels = [];
     if (getLevels.data.data) {
@@ -68,9 +92,18 @@ const Tabs = () => {
     if (sortDataLevels[indexLevel]) {
       if (getMember.data.data.member_total_point >= sortDataLevels[indexLevel].lmb_point) {
         await axios
-          .put(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`, {
-            member_level: sortDataLevels[indexLevel]._id
-          })
+          .put(
+            `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${memberLocal._id}`,
+            {
+              member_level: sortDataLevels[indexLevel]._id
+            },
+            {
+              headers: {
+                secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+                token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+              }
+            }
+          )
           .then(() => {
             Swal.fire({
               icon: 'success',

@@ -91,9 +91,20 @@ export default function User() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const getMembers = await axios.get(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members`);
+    const getMembers = await axios.get(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members`, {
+      headers: {
+        secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+        token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+      }
+    });
     const getLevels = await axios.get(
-      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/level_members`
+      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/level_members`,
+      {
+        headers: {
+          secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+          token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+        }
+      }
     );
     setLevels(getLevels.data.data);
     const MembersAndLevels = [];

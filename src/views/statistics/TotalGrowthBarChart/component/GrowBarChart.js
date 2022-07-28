@@ -8,7 +8,7 @@ import numeral from 'numeral';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Grid, MenuItem, TextField, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 
 // third-party
 import ApexCharts from 'apexcharts';
@@ -270,7 +270,7 @@ TotalGrowthBarChart.propTypes = {
   isPointHistory: PropTypes.array,
   isFilterDate: PropTypes.array,
   isNumberMonth: PropTypes.array,
-  isOwner: PropTypes.array
+  isOwner: PropTypes.object
 };
 
 export default TotalGrowthBarChart;

@@ -71,7 +71,13 @@ export default function CreateMembers() {
 
   React.useEffect(async () => {
     const getLevel = await axios.get(
-      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/level_members`
+      `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/level_members`,
+      {
+        headers: {
+          secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+          token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+        }
+      }
     );
     setLevels(getLevel.data.data);
   }, []);
@@ -132,7 +138,12 @@ export default function CreateMembers() {
         if (result.isConfirmed) {
           dispatch({ type: SET_LOADING, loading: true });
           await axios
-            .post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/use_point`, data)
+            .post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/use_point`, data, {
+              headers: {
+                secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+                token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+              }
+            })
             .then(() => {
               Swal.fire({
                 icon: 'success',
@@ -170,7 +181,12 @@ export default function CreateMembers() {
     const formData = new FormData();
     formData.append('imgCollection', event.target.files[0]);
     await axios
-      .post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/uploadImage`, formData)
+      .post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/uploadImage`, formData, {
+        headers: {
+          secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+          token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+        }
+      })
       .then((res) => valueImage.push(res.data.image))
       .catch(() => {
         Swal.fire({

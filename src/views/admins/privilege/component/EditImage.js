@@ -26,7 +26,12 @@ export default function EditImage({ item, setValues, values }) {
       }
     });
     dispatch({ type: SET_LOADING, loading: true });
-    await axios.delete(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/deleteImage/${item}`);
+    await axios.delete(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/deleteImage/${item}`, {
+      headers: {
+        secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+        token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+      }
+    });
     dispatch({ type: SET_LOADING, loading: false });
     setValues({ ...values, pvl_image: newImage });
   };

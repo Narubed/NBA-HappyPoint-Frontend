@@ -1,8 +1,8 @@
 // assets
-import { IconDashboard, IconReportSearch } from '@tabler/icons';
+import { IconDashboard, IconReportSearch, IconChecklist } from '@tabler/icons';
 
 // constant
-const icons = { IconDashboard, IconReportSearch };
+const icons = { IconDashboard, IconReportSearch, IconChecklist };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
@@ -16,7 +16,7 @@ const contacts = {
       title: 'รายชื่อสมาชิก',
       type: 'item',
       url: '/contacts',
-      icon: icons.IconDashboard,
+      icon: icons.IconChecklist,
       breadcrumbs: false
     },
     {
@@ -24,22 +24,6 @@ const contacts = {
       title: 'จัดการเลเวลผู้ใช้',
       type: 'item',
       url: '/change-level-member',
-      icon: icons.IconReportSearch,
-      breadcrumbs: false
-    },
-    {
-      id: 'สิทธิพิเศษ',
-      title: 'สิทธิพิเศษ',
-      type: 'item',
-      url: '/privilege',
-      icon: icons.IconReportSearch,
-      breadcrumbs: false
-    },
-    {
-      id: 'ใช้พอยท์',
-      title: 'ใช้พอยท์',
-      type: 'item',
-      url: '/usePoint',
       icon: icons.IconReportSearch,
       breadcrumbs: false
     }

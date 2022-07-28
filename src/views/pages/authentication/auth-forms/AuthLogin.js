@@ -1,4 +1,5 @@
-import { useState } from 'react';
+/* eslint-disable jsx-a11y/alt-text */
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import './AuthLogin.css';
 import axios from 'axios';
@@ -53,13 +54,18 @@ const FirebaseLogin = ({ ...others }) => {
     event.preventDefault();
   };
   const handleLogin = async (values) => {
-    console.log(process.env.REACT_APP_HAPPY_POINT_BACKEND);
     const data = {
       member_phone_number: values.phone,
       member_password: values.password
     };
+    const headerConfig = {
+      headers: {
+        secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+        token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+      }
+    };
     await axios
-      .post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/login_members`, data)
+      .post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/login_members`, data, headerConfig)
       .then((res) => {
         Swal.fire({
           icon: 'success',
@@ -74,11 +80,18 @@ const FirebaseLogin = ({ ...others }) => {
         localStorage.setItem('members', JSON.stringify(res.data.data));
       })
       .catch(async (error) => {
+        const newData = {
+          email: data.member_phone_number,
+          password: data.member_password
+        };
+        const headerConfig = {
+          headers: {
+            secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+            token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+          }
+        };
         await axios
-          .post(`${process.env.REACT_APP_WEB_SERVICE_BACKEND}/auth`, {
-            email: data.member_phone_number,
-            password: data.member_password
-          })
+          .post(`${process.env.REACT_APP_WEB_SERVICE_BACKEND}/auth`, newData, headerConfig)
           .then((res) => {
             Swal.fire({
               icon: 'success',
@@ -103,6 +116,20 @@ const FirebaseLogin = ({ ...others }) => {
           });
       });
   };
+
+  const Clickme = async () => {
+    console.log(`${process.env.REACT_APP_NBA_SECRET_KEY}`);
+    axios
+      .get('http://localhost:9000/api/happy-point/members', {
+        headers: {
+          secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+          token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+        }
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
   return (
     <>
       <Grid container direction="column" justifyContent="center" spacing={2}>
@@ -114,6 +141,9 @@ const FirebaseLogin = ({ ...others }) => {
           </Box>
         </Grid>
       </Grid>
+
+      <Button onClick={() => Clickme()}>Clickme</Button>
+      {/*  {isfile && <img src={isfile} />} */}
 
       <Formik
         initialValues={{

@@ -33,7 +33,12 @@ export default function index() {
     let getLevel = '';
     dispatch({ type: SET_LOADING, loading: true });
     await axios
-      .get(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/level_members`)
+      .get(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/level_members`, {
+        headers: {
+          secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+          token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+        }
+      })
       .then((res) => {
         getLevel = res.data.data.sort((a, b) => b.lmb_point - a.lmb_point);
       });
@@ -53,7 +58,12 @@ export default function index() {
     };
     dispatch({ type: SET_LOADING, loading: true });
     await axios
-      .post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/level_members`, data)
+      .post(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/level_members`, data, {
+        headers: {
+          secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+          token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+        }
+      })
       .then(() => {
         Swal.fire({
           icon: 'success',

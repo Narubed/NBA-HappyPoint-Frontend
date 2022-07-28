@@ -37,7 +37,8 @@ import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons';
 import MainCard from '../../../../ui-component/cards/MainCard';
 import Transitions from '../../../../ui-component/extended/Transitions';
 import UpgradePlanCard from './UpgradePlanCard';
-import NBAHappypoint2 from '../../../../assets/images/logo/NBAHappypoint2.png';
+import NBAHappypoint2 from '../../../../assets/images/logo/NBAHappyPoint3.png';
+import DrawerSetting from './DrawerSetting';
 
 // ==============================|| PROFILE MENU ||============================== //
 
@@ -61,7 +62,7 @@ const ProfileSection = () => {
     window.location.reload(false);
     console.log('Logout');
   };
-
+  const memberLocal = localStorage.getItem('members');
   const handleClose = (event) => {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
@@ -270,7 +271,7 @@ const ProfileSection = () => {
                           }
                         }}
                       >
-                        <ListItemButton
+                        {/* <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
                           selected={selectedIndex === 0}
                           // onClick={(event) =>
@@ -279,17 +280,13 @@ const ProfileSection = () => {
                         >
                           <ListItemIcon>
                             <IconSettings stroke={1.5} size="1.3rem" />
-                          </ListItemIcon>
-                          <ListItemText
-                            primary={<Typography variant="body2">Account Settings</Typography>}
-                          />
-                        </ListItemButton>
-                        <ListItemButton
+                          </ListItemIcon> */}
+                        {memberLocal && <DrawerSetting selectedIndex={selectedIndex} />}
+
+                        {/* </ListItemButton> */}
+                        {/* <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
                           selected={selectedIndex === 1}
-                          // onClick={(event) =>
-                          //   handleListItemClick(event, 1, '/user/social-profile/posts')
-                          // }
                         >
                           <ListItemIcon>
                             <IconUser stroke={1.5} size="1.3rem" />
@@ -313,7 +310,7 @@ const ProfileSection = () => {
                               </Grid>
                             }
                           />
-                        </ListItemButton>
+                        </ListItemButton> */}
                         <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
                           selected={selectedIndex === 4}
@@ -322,7 +319,9 @@ const ProfileSection = () => {
                           <ListItemIcon>
                             <IconLogout stroke={1.5} size="1.3rem" />
                           </ListItemIcon>
-                          <ListItemText primary={<Typography variant="body2">Logout</Typography>} />
+                          <ListItemText
+                            primary={<Typography variant="body2">ออกจากระบบ</Typography>}
+                          />
                         </ListItemButton>
                       </List>
                     </Box>

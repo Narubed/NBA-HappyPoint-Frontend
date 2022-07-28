@@ -102,7 +102,16 @@ const PartnerCard = ({ level }) => {
     };
     dispatch({ type: SET_LOADING, loading: true });
     await axios
-      .put(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/level_members/${level._id}`, data)
+      .put(
+        `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/level_members/${level._id}`,
+        data,
+        {
+          headers: {
+            secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+            token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+          }
+        }
+      )
       .then(() => {
         Swal.fire({
           icon: 'success',
@@ -139,7 +148,15 @@ const PartnerCard = ({ level }) => {
       if (result.isConfirmed) {
         dispatch({ type: SET_LOADING, loading: true });
         await axios
-          .delete(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/level_members/${level._id}`)
+          .delete(
+            `${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/level_members/${level._id}`,
+            {
+              headers: {
+                secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+                token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+              }
+            }
+          )
           .then(() => {
             Swal.fire({
               icon: 'success',

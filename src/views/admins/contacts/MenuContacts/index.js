@@ -40,7 +40,12 @@ export default function MenuContacts({ item, levels }) {
     }).then(async (result) => {
       if (result.isConfirmed) {
         dispatch({ type: SET_LOADING, loading: true });
-        await axios.delete(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${item._id}`);
+        await axios.delete(`${process.env.REACT_APP_HAPPY_POINT_BACKEND}/members/${item._id}`, {
+          headers: {
+            secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+            token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+          }
+        });
         Swal.fire({
           icon: 'success',
           title: 'ยืนยันการทำรายการ',

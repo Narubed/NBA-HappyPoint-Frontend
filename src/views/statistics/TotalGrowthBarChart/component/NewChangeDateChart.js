@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import dayjs from 'dayjs';
 
 export default function ChangeDateChart({ filterStatus, setFilterDate, setNumberMonth }) {
