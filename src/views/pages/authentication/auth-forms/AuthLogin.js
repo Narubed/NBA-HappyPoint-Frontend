@@ -106,7 +106,6 @@ const FirebaseLogin = ({ ...others }) => {
             localStorage.setItem('admins', JSON.stringify(res.data.data));
           })
           .catch((error) => {
-            console.log(error);
             Swal.fire({
               icon: 'info',
               html: '<p style="font-size: 20px">เบอร์โทรศัพท์หรือรหัส ไม่ถูกต้อง</p>',
@@ -127,7 +126,9 @@ const FirebaseLogin = ({ ...others }) => {
         }
       })
       .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        throw new Error('404');
+      });
   };
 
   return (
