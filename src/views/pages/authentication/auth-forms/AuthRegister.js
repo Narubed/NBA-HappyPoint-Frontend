@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import React, { useState } from 'react';
-import OTPInput, { ResendOTP } from 'otp-input-react';
+import OTPInput from 'otp-input-react';
 
 import axios from 'axios';
 import { useFormik, Form, FormikProvider } from 'formik';

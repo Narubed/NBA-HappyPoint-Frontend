@@ -29,7 +29,9 @@ const UtilsTablerIcons = Loadable(lazy(() => import('../views/utilities/TablerIc
 
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('../views/sample-page')));
-
+// ReportHisrory
+const UseingPoint = Loadable(lazy(() => import('../views/admins/reportHistory/useingPoint')));
+const Historypoint = Loadable(lazy(() => import('../views/admins/reportHistory/historyPoint')));
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -72,6 +74,15 @@ const MainRoutes = {
       path: '/usePoint/edit',
       element: <EditUsePoint />
     },
+    {
+      path: '/useing-point',
+      element: <UseingPoint />
+    },
+    {
+      path: '/history-point',
+      element: <Historypoint />
+    },
+
     {
       path: '*',
       element: <Dashboard /> // กลับมาตั้งไฟล์ 404 ด้วย

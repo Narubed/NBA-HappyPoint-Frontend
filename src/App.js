@@ -20,7 +20,19 @@ const App = () => {
   const customization = useSelector((state) => state.customization);
   const members = localStorage.getItem('members');
   const admins = localStorage.getItem('admins');
-  const tokenMembers = JSON.parse(members);
+  let tokenMembers = null;
+  const checkToken = JSON.parse(members);
+  if (
+    !checkToken ||
+    !checkToken._id ||
+    !checkToken.member_firstname ||
+    !checkToken.member_lastname
+  ) {
+    tokenMembers = null;
+  } else {
+    tokenMembers = checkToken;
+  }
+
   const tokenAdmins = JSON.parse(admins);
   // eslint-disable-next-line no-multi-assign
   if (process.env.NODE_ENV !== 'development') console.log = console.warn = console.error = () => {};

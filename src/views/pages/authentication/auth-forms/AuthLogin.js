@@ -37,6 +37,7 @@ import useScriptRef from '../../../../hooks/useScriptRef';
 import AnimateButton from '../../../../ui-component/extended/AnimateButton';
 
 import Google from '../../../../assets/images/icons/social-google.svg';
+import AuthChangePassword from './AuthChangePassword';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -116,20 +117,20 @@ const FirebaseLogin = ({ ...others }) => {
       });
   };
 
-  const Clickme = async () => {
-    console.log(`${process.env.REACT_APP_NBA_SECRET_KEY}`);
-    axios
-      .get('http://localhost:9000/api/happy-point/members', {
-        headers: {
-          secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
-          token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
-        }
-      })
-      .then((res) => console.log(res))
-      .catch((err) => {
-        throw new Error('404');
-      });
-  };
+  // const Clickme = async () => {
+  //   console.log(`${process.env.REACT_APP_NBA_SECRET_KEY}`);
+  //   axios
+  //     .get('http://localhost:9000/api/happy-point/members', {
+  //       headers: {
+  //         secret_key: `${process.env.REACT_APP_NBA_SECRET_KEY}`,
+  //         token_key: `${process.env.REACT_APP_NBA_TOKEN_KEY}`
+  //       }
+  //     })
+  //     .then((res) => console.log(res))
+  //     .catch((err) => {
+  //       throw new Error('404');
+  //     });
+  // };
 
   return (
     <>
@@ -143,7 +144,7 @@ const FirebaseLogin = ({ ...others }) => {
         </Grid>
       </Grid>
 
-      <Button onClick={() => Clickme()}>Clickme</Button>
+      {/* <Button onClick={() => Clickme()}>Clickme</Button> */}
       {/*  {isfile && <img src={isfile} />} */}
 
       <Formik
@@ -240,13 +241,7 @@ const FirebaseLogin = ({ ...others }) => {
               )}
             </FormControl>
             <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
-              <Typography
-                variant="subtitle1"
-                color="secondary"
-                sx={{ textDecoration: 'none', cursor: 'pointer' }}
-              >
-                ลืมรหัสผ่าน ?
-              </Typography>
+              <AuthChangePassword />
             </Stack>
             {errors.submit && (
               <Box sx={{ mt: 3 }}>
